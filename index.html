@@ -33,17 +33,17 @@
   .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .metric { background: var(--bg); border-radius: var(--radius-sm); padding: .7rem 1rem; }
   .metric-label { font-size: 11px; color: var(--text-3); margin-bottom: 3px; }
-  .metric-value { font-size: 20px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+  .metric-value { font-size: 19px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -.3px; }
   .metric-ch { font-size: 11px; margin-top: 2px; font-variant-numeric: tabular-nums; }
   .up { color: var(--up); } .down { color: var(--down); }
   .metric-note { font-size: 11px; color: var(--text-3); margin-top: 9px; }
   .news-list { display: flex; flex-direction: column; }
-  .news-item { padding: .65rem 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .news-item { padding: .6rem 0; border-bottom: 1px solid var(--border); cursor: pointer; }
   .news-item:last-child { border-bottom: none; padding-bottom: 0; }
   .news-item:hover .news-hl { color: var(--navy); text-decoration: underline; }
-  .news-src { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
-  .src-tag { background: var(--navy-light); color: var(--navy); padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
-  .news-hl { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .news-src { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .src-tag { background: var(--navy-light); color: var(--navy); padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+  .news-hl { font-size: 12.5px; color: var(--text); line-height: 1.5; }
   .loading-text { font-size: 12px; color: var(--text-3); padding: .4rem 0; }
   .spinner { display: inline-block; width: 10px; height: 10px; border: 1.5px solid var(--border); border-top-color: var(--text-3); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 5px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -69,10 +69,10 @@
         <button class="btn-sm" id="btn-metrics" onclick="loadMetrics()">새로고침</button>
       </div>
       <div class="metrics">
-        <div class="metric"><div class="metric-label">원/달러</div><div class="metric-value" id="m-usd">—</div><div class="metric-ch" id="m-usd-ch"></div></div>
+        <div class="metric"><div class="metric-label">원/달러 (KRW)</div><div class="metric-value" id="m-usd">—</div><div class="metric-ch" id="m-usd-ch"></div></div>
         <div class="metric"><div class="metric-label">S&P 500</div><div class="metric-value" id="m-sp">—</div><div class="metric-ch" id="m-sp-ch"></div></div>
-        <div class="metric"><div class="metric-label">국제유가 (WTI)</div><div class="metric-value" id="m-oil">—</div><div class="metric-ch" id="m-oil-ch"></div></div>
-        <div class="metric"><div class="metric-label">미 10년물</div><div class="metric-value" id="m-bond">—</div><div class="metric-ch" id="m-bond-ch"></div></div>
+        <div class="metric"><div class="metric-label">국제유가 WTI ($/배럴)</div><div class="metric-value" id="m-oil">—</div><div class="metric-ch" id="m-oil-ch"></div></div>
+        <div class="metric"><div class="metric-label">미 국채 10년물</div><div class="metric-value" id="m-bond">—</div><div class="metric-ch" id="m-bond-ch"></div></div>
       </div>
       <div id="metrics-note" class="metric-note"></div>
     </div>
@@ -104,7 +104,7 @@ async function loadMetrics(){
   btn.disabled = true;
   note.innerHTML = '<span class="spinner"></span>불러오는 중...';
   const symbols = ['USDKRW=X','^GSPC','CL=F','^TNX'];
-  const ids = ['m-usd','m-sp','m-oil','m-bond'];
+  const ids     = ['m-usd','m-sp','m-oil','m-bond'];
   let ok = 0;
   for(let i=0;i<symbols.length;i++){
     try{
@@ -113,16 +113,25 @@ async function loadMetrics(){
       const outer = await res.json();
       const meta = JSON.parse(outer.contents).chart.result[0].meta;
       const price = meta.regularMarketPrice;
-      const prev = meta.chartPreviousClose || meta.previousClose || price;
-      const diff = price - prev;
-      const pct = diff / prev * 100;
-      const isUp = diff >= 0;
-      const id = ids[i];
+      const prev  = meta.chartPreviousClose || meta.previousClose || price;
+      const diff  = price - prev;
+      const pct   = diff / prev * 100;
+      const isUp  = diff >= 0;
+      const id    = ids[i];
       let val, ch;
-      if(id==='m-usd'){ val = price.toLocaleString('ko-KR',{maximumFractionDigits:2}); ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)'; }
-      else if(id==='m-sp'){ val = price.toLocaleString('ko-KR',{maximumFractionDigits:0}); ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(1)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)'; }
-      else if(id==='m-oil'){ val = '$'+price.toFixed(2); ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)'; }
-      else { val = price.toFixed(2)+'%'; ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp'; }
+      if(id==='m-usd'){
+        val = price.toFixed(2);
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+      } else if(id==='m-sp'){
+        val = price.toFixed(2);
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+      } else if(id==='m-oil'){
+        val = '$'+price.toFixed(2);
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+      } else {
+        val = price.toFixed(3)+'%';
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp';
+      }
       document.getElementById(id).textContent = val;
       const cel = document.getElementById(id+'-ch');
       cel.textContent = ch; cel.className = 'metric-ch '+(isUp?'up':'down');
@@ -139,48 +148,68 @@ async function loadMetrics(){
 }
 
 const GN_QUERIES = [
-  { label: 'Fed',    q: 'Federal+Reserve+interest+rate' },
-  { label: 'Economy',q: 'US+economy+GDP+inflation' },
-  { label: 'Trade',  q: 'US+China+trade+tariff' },
-  { label: 'Markets',q: 'Wall+Street+stock+market' },
+  { q: 'Federal+Reserve+rate+policy' },
+  { q: 'US+economy+inflation+GDP' },
+  { q: 'US+China+trade+tariff+sanctions' },
+  { q: 'Wall+Street+stocks+earnings' },
+  { q: 'Iran+nuclear+deal+sanctions' },
+  { q: 'Korea+economy+export+Bank+of+Korea' },
+  { q: 'semiconductor+chip+export+control' },
+  { q: 'ECB+BOJ+central+bank+rate' },
 ];
 
 async function loadNews(){
-  const el = document.getElementById('news-list');
+  const el  = document.getElementById('news-list');
   const btn = document.getElementById('btn-news');
   btn.disabled = true;
   el.innerHTML = '<div class="loading-text"><span class="spinner"></span>헤드라인 불러오는 중...</div>';
+
+  const seen = new Set();
   let items = [];
-  for(const src of GN_QUERIES){
-    try{
-      const gnUrl = `https://news.google.com/rss/search?q=${src.q}&hl=en-US&gl=US&ceid=US:en`;
-      const res = await fetch(PROXY + encodeURIComponent(gnUrl));
-      const outer = await res.json();
-      const xml = new DOMParser().parseFromString(outer.contents, 'text/xml');
-      const entries = xml.querySelectorAll('item');
-      for(let i=0;i<Math.min(2,entries.length);i++){
-        const hl = entries[i].querySelector('title')?.textContent?.trim()||'';
-        const link = entries[i].querySelector('link')?.textContent?.trim()||'#';
-        const pub = entries[i].querySelector('pubDate')?.textContent||'';
-        const src2 = entries[i].querySelector('source')?.textContent?.trim()||src.label;
-        let timeStr = '';
-        if(pub){
-          const d = new Date(pub);
-          const k = new Date(d.getTime()+(9*60-d.getTimezoneOffset())*60000);
-          timeStr = pad(k.getUTCHours())+':'+pad(k.getUTCMinutes())+' KST';
+
+  const promises = GN_QUERIES.map(src => {
+    const gnUrl = `https://news.google.com/rss/search?q=${src.q}&hl=en-US&gl=US&ceid=US:en`;
+    return fetch(PROXY + encodeURIComponent(gnUrl))
+      .then(r => r.json())
+      .then(outer => {
+        const xml = new DOMParser().parseFromString(outer.contents, 'text/xml');
+        const entries = xml.querySelectorAll('item');
+        const results = [];
+        for(let i=0;i<Math.min(2,entries.length);i++){
+          const hl   = entries[i].querySelector('title')?.textContent?.trim()||'';
+          const link = entries[i].querySelector('link')?.textContent?.trim()||'#';
+          const pub  = entries[i].querySelector('pubDate')?.textContent||'';
+          const src2 = entries[i].querySelector('source')?.textContent?.trim()||'News';
+          if(!hl || seen.has(hl)) continue;
+          seen.add(hl);
+          let timeStr = '';
+          if(pub){
+            const d = new Date(pub);
+            const k = new Date(d.getTime()+(9*60-d.getTimezoneOffset())*60000);
+            timeStr = pad(k.getUTCHours())+':'+pad(k.getUTCMinutes())+' KST';
+          }
+          results.push({tag: src2, hl, link, time: timeStr, pubDate: pub ? new Date(pub).getTime() : 0});
         }
-        if(hl) items.push({tag:src2, hl, link, time:timeStr});
-      }
-    } catch(e){}
-  }
+        return results;
+      })
+      .catch(()=>[]);
+  });
+
+  const allResults = await Promise.all(promises);
+  items = allResults.flat().sort((a,b)=>b.pubDate-a.pubDate);
+
   if(!items.length){
     el.innerHTML = '<div class="loading-text">헤드라인을 불러오지 못했습니다. 잠시 후 새로고침해주세요.</div>';
     btn.disabled = false; return;
   }
-  el.innerHTML = items.slice(0,8).map(it=>`
+
+  el.innerHTML = items.slice(0,12).map(it=>`
     <div class="news-item" onclick="window.open('${it.link}','_blank')">
-      <div class="news-src"><span class="src-tag">${it.tag.replace(/</g,'&lt;').slice(0,20)}</span>${it.time}</div>
-      <div class="news-hl">${it.hl.replace(/</g,'&lt;').slice(0,130)}</div>
+      <div class="news-src">
+        <span class="src-tag">${it.tag.replace(/</g,'&lt;').slice(0,25)}</span>
+        <span>${it.time}</span>
+      </div>
+      <div class="news-hl">${it.hl.replace(/</g,'&lt;').slice(0,140)}</div>
     </div>
   `).join('');
   btn.disabled = false;
