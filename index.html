@@ -188,7 +188,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-const PROXY = "https://api.allorigins.win/get?url=";
+const PROXY = "https://corsproxy.io/?url=";
 
 function pad(n){ return String(n).padStart(2,'0'); }
 function updateClock(){
@@ -220,9 +220,17 @@ window.loadMetrics = async function(){
   for(let i=0;i<symbols.length;i++){
     try{
       const url=`https://query1.finance.yahoo.com/v8/finance/chart/${symbols[i]}?interval=1d&range=2d`;
-      const res=await fetch(PROXY+encodeURIComponent(url));
-      const outer=await res.json();
-      const meta=JSON.parse(outer.contents).chart.result[0].meta;
+      let meta;
+      try {
+        const r1=await fetch(PROXY+encodeURIComponent(url));
+        const o1=await r1.json();
+        const raw=typeof o1.contents==='string'?JSON.parse(o1.contents):o1;
+        meta=raw.chart.result[0].meta;
+      } catch(e1) {
+        const r2=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`);
+        const o2=await r2.json();
+        meta=o2.chart.result[0].meta;
+      }
       const price=meta.regularMarketPrice;
       const diff=meta.regularMarketChange||(price-(meta.chartPreviousClose||meta.previousClose||price));
       const pct=meta.regularMarketChangePercent||(diff/(meta.chartPreviousClose||meta.previousClose||price)*100);
