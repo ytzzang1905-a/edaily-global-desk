@@ -93,8 +93,8 @@ const PROXY = "https://api.allorigins.win/get?url=";
 function pad(n){ return String(n).padStart(2,'0'); }
 function updateClock(){
   const now = new Date();
-  const kst = new Date(now.getTime() + (9*60 - now.getTimezoneOffset())*60000);
-  document.getElementById('clock').textContent = pad(kst.getUTCHours())+':'+pad(kst.getUTCMinutes())+':'+pad(kst.getUTCSeconds())+' KST';
+  const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+  const h=kst.getHours(),m=kst.getMinutes(),s=kst.getSeconds(); document.getElementById('clock').textContent=pad(h)+':'+pad(m)+':'+pad(s)+' KST';
 }
 setInterval(updateClock, 1000); updateClock();
 
@@ -142,8 +142,8 @@ async function loadMetrics(){
     }
   }
   const now = new Date();
-  const kst = new Date(now.getTime()+(9*60-now.getTimezoneOffset())*60000);
-  note.textContent = pad(kst.getUTCHours())+':'+pad(kst.getUTCMinutes())+' KST 기준'+(ok<4?' (일부 오류)':'');
+  const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+  note.textContent=pad(kst.getHours())+':'+pad(kst.getMinutes())+' KST 기준'+(ok<4?' (일부 오류)':'');
   btn.disabled = false;
 }
 
@@ -185,8 +185,8 @@ async function loadNews(){
           let timeStr = '';
           if(pub){
             const d = new Date(pub);
-            const k = new Date(d.getTime()+(9*60-d.getTimezoneOffset())*60000);
-            timeStr = pad(k.getUTCHours())+':'+pad(k.getUTCMinutes())+' KST';
+            const k = new Date(d.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+            timeStr=pad(k.getHours())+':'+pad(k.getMinutes())+' KST';
           }
           results.push({tag: src2, hl, link, time: timeStr, pubDate: pub ? new Date(pub).getTime() : 0});
         }
