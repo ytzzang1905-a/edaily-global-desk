@@ -395,5 +395,11 @@ loadMetrics();
 loadNews();
 loadMemos();
 </script>
+<script>
+function loadMetrics(){ window.loadMetrics && window.loadMetrics(); }
+function loadNews(){ window.loadNews && window.loadNews(); }
+function filterMemos(){ window.filterMemos && window.filterMemos(); }
+function postMemo(){ window.postMemo && window.postMemo(); }
+</script>
 </body>
 </html>
