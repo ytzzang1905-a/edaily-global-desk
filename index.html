@@ -113,9 +113,8 @@ async function loadMetrics(){
       const outer = await res.json();
       const meta = JSON.parse(outer.contents).chart.result[0].meta;
       const price = meta.regularMarketPrice;
-      const prev  = meta.chartPreviousClose || meta.previousClose || price;
-      const diff  = price - prev;
-      const pct   = diff / prev * 100;
+      const diff  = meta.regularMarketChange || (price - (meta.chartPreviousClose || meta.previousClose || price));
+      const pct   = meta.regularMarketChangePercent || (diff / (meta.chartPreviousClose || meta.previousClose || price) * 100);
       const isUp  = diff >= 0;
       const id    = ids[i];
       let val, ch;
