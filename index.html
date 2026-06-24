@@ -119,14 +119,14 @@ async function loadMetrics(){
       const id    = ids[i];
       let val, ch;
       if(id==='m-usd'){
-        val = price.toFixed(2);
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+        val = price.toLocaleString('ko-KR', {minimumFractionDigits:2, maximumFractionDigits:2});
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
       } else if(id==='m-sp'){
-        val = price.toFixed(2);
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+        val = price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
       } else if(id==='m-oil'){
         val = '$'+price.toFixed(2);
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
       } else {
         val = price.toFixed(3)+'%';
         ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp';
