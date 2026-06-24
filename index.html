@@ -14,7 +14,7 @@
     --radius: 10px; --radius-sm: 6px;
   }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
   header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.1rem; border-bottom: 1.5px solid var(--border); margin-bottom: 1.5rem; }
   .logo { display: flex; align-items: center; gap: 12px; }
   .logo-badge { background: var(--navy); color: #fff; font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: var(--radius-sm); }
@@ -22,6 +22,7 @@
   .logo-text p { font-size: 11px; color: var(--text-3); margin-top: 1px; }
   #clock { font-size: 13px; color: var(--text-2); background: var(--card); border: 1px solid var(--border); padding: 5px 12px; border-radius: var(--radius-sm); font-variant-numeric: tabular-nums; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .col { display: flex; flex-direction: column; gap: 1.25rem; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; }
   .card-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
   .card-title { font-size: 12px; font-weight: 600; color: var(--text-2); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .3px; }
@@ -44,6 +45,36 @@
   .news-src { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
   .src-tag { background: var(--navy-light); color: var(--navy); padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap; }
   .news-hl { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+  .memo-list { display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
+  .memo-item { background: var(--bg); border-radius: var(--radius-sm); padding: .75rem 1rem; border: 1px solid transparent; transition: border-color .15s; }
+  .memo-item:hover { border-color: var(--border); }
+  .memo-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+  .memo-author { font-size: 11px; font-weight: 600; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+  .avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .memo-date { font-size: 11px; color: var(--text-3); }
+  .memo-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .memo-body { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+  .tag { display: inline-block; margin-top: 5px; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+  .tag-Fed { background: #dbeafe; color: #1e40af; }
+  .tag-무역 { background: #fef3c7; color: #92400e; }
+  .tag-이란 { background: #fee2e2; color: #991b1b; }
+  .tag-미중 { background: #dcfce7; color: #166534; }
+  .tag-매크로 { background: #ede9fe; color: #5b21b6; }
+  .tag-아이디어 { background: #d1fae5; color: #065f46; }
+  .tag-높음 { background: #fee2e2; color: #991b1b; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+  .search-bar { display: flex; gap: 8px; margin-bottom: 10px; }
+  .search-bar input { flex: 1; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); }
+  .search-bar select { font-size: 12px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); }
+  .memo-form { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .memo-form input, .memo-form select, .memo-form textarea { width: 100%; font-size: 12px; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-family: inherit; }
+  .memo-form input:focus, .memo-form select:focus, .memo-form textarea:focus { outline: none; border-color: var(--navy); }
+  .memo-form textarea { resize: vertical; min-height: 68px; }
+  .btn-post { background: var(--navy); color: #fff; border: none; border-radius: var(--radius-sm); padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+  .btn-post:hover { opacity: .85; }
+  .btn-post:disabled { opacity: .5; cursor: default; }
+  .form-status { font-size: 11px; text-align: center; min-height: 16px; }
+  .status-ok { color: var(--down); } .status-err { color: var(--up); }
   .loading-text { font-size: 12px; color: var(--text-3); padding: .4rem 0; }
   .spinner { display: inline-block; width: 10px; height: 10px; border: 1.5px solid var(--border); border-top-color: var(--text-3); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 5px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -62,160 +93,307 @@
     </div>
     <span id="clock">--:-- KST</span>
   </header>
+
   <div class="grid">
-    <div class="card">
-      <div class="card-hd">
-        <span class="card-title">주요 지표 <span class="live-dot"></span></span>
-        <button class="btn-sm" id="btn-metrics" onclick="loadMetrics()">새로고침</button>
+    <div class="col">
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">주요 지표 <span class="live-dot"></span></span>
+          <button class="btn-sm" id="btn-metrics" onclick="loadMetrics()">새로고침</button>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="metric-label">원/달러 (KRW)</div><div class="metric-value" id="m-usd">—</div><div class="metric-ch" id="m-usd-ch"></div></div>
+          <div class="metric"><div class="metric-label">S&P 500</div><div class="metric-value" id="m-sp">—</div><div class="metric-ch" id="m-sp-ch"></div></div>
+          <div class="metric"><div class="metric-label">국제유가 WTI ($/배럴)</div><div class="metric-value" id="m-oil">—</div><div class="metric-ch" id="m-oil-ch"></div></div>
+          <div class="metric"><div class="metric-label">미 국채 10년물</div><div class="metric-value" id="m-bond">—</div><div class="metric-ch" id="m-bond-ch"></div></div>
+        </div>
+        <div id="metrics-note" class="metric-note"></div>
       </div>
-      <div class="metrics">
-        <div class="metric"><div class="metric-label">원/달러 (KRW)</div><div class="metric-value" id="m-usd">—</div><div class="metric-ch" id="m-usd-ch"></div></div>
-        <div class="metric"><div class="metric-label">S&P 500</div><div class="metric-value" id="m-sp">—</div><div class="metric-ch" id="m-sp-ch"></div></div>
-        <div class="metric"><div class="metric-label">국제유가 WTI ($/배럴)</div><div class="metric-value" id="m-oil">—</div><div class="metric-ch" id="m-oil-ch"></div></div>
-        <div class="metric"><div class="metric-label">미 국채 10년물</div><div class="metric-value" id="m-bond">—</div><div class="metric-ch" id="m-bond-ch"></div></div>
+
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">외신 헤드라인</span>
+          <button class="btn-sm" id="btn-news" onclick="loadNews()">새로고침</button>
+        </div>
+        <div class="news-list" id="news-list">
+          <div class="loading-text"><span class="spinner"></span>불러오는 중...</div>
+        </div>
       </div>
-      <div id="metrics-note" class="metric-note"></div>
     </div>
-    <div class="card">
-      <div class="card-hd">
-        <span class="card-title">외신 헤드라인</span>
-        <button class="btn-sm" id="btn-news" onclick="loadNews()">새로고침</button>
-      </div>
-      <div class="news-list" id="news-list">
-        <div class="loading-text"><span class="spinner"></span>불러오는 중...</div>
+
+    <div class="col">
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">취재 메모 · 아이디어 게시판</span>
+          <button class="btn-sm" onclick="loadMemos()">새로고침</button>
+        </div>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="키워드 검색..." oninput="filterMemos()">
+          <select id="filter-tag" onchange="filterMemos()">
+            <option value="">전체 태그</option>
+            <option value="아이디어">아이디어</option>
+            <option value="Fed">Fed</option>
+            <option value="무역">무역</option>
+            <option value="이란">이란</option>
+            <option value="미중">미중</option>
+            <option value="매크로">매크로</option>
+          </select>
+        </div>
+        <div class="memo-list" id="memo-list">
+          <div class="loading-text"><span class="spinner"></span>게시판 불러오는 중...</div>
+        </div>
+        <div class="memo-form">
+          <div class="form-row">
+            <input type="text" id="f-name" placeholder="이름" maxlength="20">
+            <select id="f-tag">
+              <option value="아이디어">아이디어</option>
+              <option value="Fed">Fed</option>
+              <option value="무역">무역</option>
+              <option value="이란">이란</option>
+              <option value="미중">미중</option>
+              <option value="매크로">매크로</option>
+            </select>
+          </div>
+          <input type="text" id="f-title" placeholder="제목" maxlength="80">
+          <textarea id="f-body" placeholder="취재 아이디어나 공유할 내용을 입력하세요..."></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <select id="f-priority" style="flex:1;">
+              <option value="보통">중요도: 보통</option>
+              <option value="높음">중요도: 높음</option>
+              <option value="낮음">중요도: 낮음</option>
+            </select>
+            <button class="btn-post" id="btn-post" onclick="postMemo()">게시</button>
+          </div>
+          <div class="form-status" id="form-status"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCrkPUI6ZhtaU_I6Y26jWD1-o66tvYQZfU",
+  authDomain: "edaily-global-desk.firebaseapp.com",
+  databaseURL: "https://edaily-global-desk-default-rtdb.firebaseio.com",
+  projectId: "edaily-global-desk",
+  storageBucket: "edaily-global-desk.firebasestorage.app",
+  messagingSenderId: "141406293983",
+  appId: "1:141406293983:web:9014f8c969a8d5a51fbe6a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
 const PROXY = "https://api.allorigins.win/get?url=";
 
 function pad(n){ return String(n).padStart(2,'0'); }
 function updateClock(){
   const now = new Date();
-  const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
-  const h=kst.getHours(),m=kst.getMinutes(),s=kst.getSeconds(); document.getElementById('clock').textContent=pad(h)+':'+pad(m)+':'+pad(s)+' KST';
+  const kst = new Date(now.toLocaleString("en-US", {timeZone:"Asia/Seoul"}));
+  const h=kst.getHours(), m=kst.getMinutes(), s=kst.getSeconds();
+  document.getElementById('clock').textContent = pad(h)+':'+pad(m)+':'+pad(s)+' KST';
 }
 setInterval(updateClock, 1000); updateClock();
 
-async function loadMetrics(){
-  const btn = document.getElementById('btn-metrics');
-  const note = document.getElementById('metrics-note');
-  btn.disabled = true;
-  note.innerHTML = '<span class="spinner"></span>불러오는 중...';
-  const symbols = ['USDKRW=X','^GSPC','CL=F','^TNX'];
-  const ids     = ['m-usd','m-sp','m-oil','m-bond'];
-  let ok = 0;
+function relTime(ts){
+  const d = Math.floor((Date.now()-ts)/60000);
+  if(d<1) return '방금';
+  if(d<60) return d+'분 전';
+  const h=Math.floor(d/60);
+  if(h<24) return h+'시간 전';
+  return Math.floor(h/24)+'일 전';
+}
+function initials(name){ return (name||'?').trim().slice(-2); }
+
+window.loadMetrics = async function(){
+  const btn=document.getElementById('btn-metrics');
+  const note=document.getElementById('metrics-note');
+  btn.disabled=true;
+  note.innerHTML='<span class="spinner"></span>불러오는 중...';
+  const symbols=['USDKRW=X','^GSPC','CL=F','^TNX'];
+  const ids=['m-usd','m-sp','m-oil','m-bond'];
+  let ok=0;
   for(let i=0;i<symbols.length;i++){
     try{
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbols[i]}?interval=1d&range=2d`;
-      const res = await fetch(PROXY + encodeURIComponent(url));
-      const outer = await res.json();
-      const meta = JSON.parse(outer.contents).chart.result[0].meta;
-      const price = meta.regularMarketPrice;
-      const diff  = meta.regularMarketChange || (price - (meta.chartPreviousClose || meta.previousClose || price));
-      const pct   = meta.regularMarketChangePercent || (diff / (meta.chartPreviousClose || meta.previousClose || price) * 100);
-      const isUp  = diff >= 0;
-      const id    = ids[i];
-      let val, ch;
+      const url=`https://query1.finance.yahoo.com/v8/finance/chart/${symbols[i]}?interval=1d&range=2d`;
+      const res=await fetch(PROXY+encodeURIComponent(url));
+      const outer=await res.json();
+      const meta=JSON.parse(outer.contents).chart.result[0].meta;
+      const price=meta.regularMarketPrice;
+      const diff=meta.regularMarketChange||(price-(meta.chartPreviousClose||meta.previousClose||price));
+      const pct=meta.regularMarketChangePercent||(diff/(meta.chartPreviousClose||meta.previousClose||price)*100);
+      const isUp=diff>=0;
+      const id=ids[i];
+      let val,ch;
       if(id==='m-usd'){
-        val = price.toLocaleString('ko-KR', {minimumFractionDigits:2, maximumFractionDigits:2});
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
+        val=price.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2});
+        ch=(isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
       } else if(id==='m-sp'){
-        val = price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
+        val=price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+        ch=(isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
       } else if(id==='m-oil'){
-        val = '$'+price.toFixed(2);
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
+        val='$'+price.toFixed(2);
+        ch=(isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+Math.abs(pct).toFixed(2)+'%)';
       } else {
-        val = price.toFixed(3)+'%';
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp';
+        val=price.toFixed(3)+'%';
+        ch=(isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp';
       }
-      document.getElementById(id).textContent = val;
-      const cel = document.getElementById(id+'-ch');
-      cel.textContent = ch; cel.className = 'metric-ch '+(isUp?'up':'down');
+      document.getElementById(id).textContent=val;
+      const cel=document.getElementById(id+'-ch');
+      cel.textContent=ch; cel.className='metric-ch '+(isUp?'up':'down');
       ok++;
     } catch(e){
-      document.getElementById(ids[i]).textContent = '—';
-      document.getElementById(ids[i]+'-ch').textContent = '연결 오류';
+      document.getElementById(ids[i]).textContent='—';
+      document.getElementById(ids[i]+'-ch').textContent='연결 오류';
     }
   }
-  const now = new Date();
-  const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+  const now=new Date();
+  const kst=new Date(now.toLocaleString("en-US",{timeZone:"Asia/Seoul"}));
   note.textContent=pad(kst.getHours())+':'+pad(kst.getMinutes())+' KST 기준'+(ok<4?' (일부 오류)':'');
-  btn.disabled = false;
-}
+  btn.disabled=false;
+};
 
-const GN_QUERIES = [
-  { q: 'Federal+Reserve+rate+policy' },
-  { q: 'US+economy+inflation+GDP' },
-  { q: 'US+China+trade+tariff+sanctions' },
-  { q: 'Wall+Street+stocks+earnings' },
-  { q: 'Iran+nuclear+deal+sanctions' },
-  { q: 'Korea+economy+export+Bank+of+Korea' },
-  { q: 'semiconductor+chip+export+control' },
-  { q: 'ECB+BOJ+central+bank+rate' },
+const GN_QUERIES=[
+  {q:'Federal+Reserve+rate+policy'},
+  {q:'US+economy+inflation+GDP'},
+  {q:'US+China+trade+tariff+sanctions'},
+  {q:'Wall+Street+stocks+earnings'},
+  {q:'Iran+nuclear+deal+sanctions'},
+  {q:'Korea+economy+export+Bank+of+Korea'},
+  {q:'semiconductor+chip+export+control'},
+  {q:'ECB+BOJ+central+bank+rate'},
 ];
 
-async function loadNews(){
-  const el  = document.getElementById('news-list');
-  const btn = document.getElementById('btn-news');
-  btn.disabled = true;
-  el.innerHTML = '<div class="loading-text"><span class="spinner"></span>헤드라인 불러오는 중...</div>';
-
-  const seen = new Set();
-  let items = [];
-
-  const promises = GN_QUERIES.map(src => {
-    const gnUrl = `https://news.google.com/rss/search?q=${src.q}&hl=en-US&gl=US&ceid=US:en`;
-    return fetch(PROXY + encodeURIComponent(gnUrl))
-      .then(r => r.json())
-      .then(outer => {
-        const xml = new DOMParser().parseFromString(outer.contents, 'text/xml');
-        const entries = xml.querySelectorAll('item');
-        const results = [];
+window.loadNews = async function(){
+  const el=document.getElementById('news-list');
+  const btn=document.getElementById('btn-news');
+  btn.disabled=true;
+  el.innerHTML='<div class="loading-text"><span class="spinner"></span>헤드라인 불러오는 중...</div>';
+  const seen=new Set();
+  const promises=GN_QUERIES.map(src=>{
+    const gnUrl=`https://news.google.com/rss/search?q=${src.q}&hl=en-US&gl=US&ceid=US:en`;
+    return fetch(PROXY+encodeURIComponent(gnUrl))
+      .then(r=>r.json())
+      .then(outer=>{
+        const xml=new DOMParser().parseFromString(outer.contents,'text/xml');
+        const entries=xml.querySelectorAll('item');
+        const results=[];
         for(let i=0;i<Math.min(2,entries.length);i++){
-          const hl   = entries[i].querySelector('title')?.textContent?.trim()||'';
-          const link = entries[i].querySelector('link')?.textContent?.trim()||'#';
-          const pub  = entries[i].querySelector('pubDate')?.textContent||'';
-          const src2 = entries[i].querySelector('source')?.textContent?.trim()||'News';
-          if(!hl || seen.has(hl)) continue;
+          const hl=entries[i].querySelector('title')?.textContent?.trim()||'';
+          const link=entries[i].querySelector('link')?.textContent?.trim()||'#';
+          const pub=entries[i].querySelector('pubDate')?.textContent||'';
+          const src2=entries[i].querySelector('source')?.textContent?.trim()||'News';
+          if(!hl||seen.has(hl)) continue;
           seen.add(hl);
-          let timeStr = '';
+          let timeStr='';
           if(pub){
-            const d = new Date(pub);
-            const k = new Date(d.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+            const d=new Date(pub);
+            const k=new Date(d.toLocaleString("en-US",{timeZone:"Asia/Seoul"}));
             timeStr=pad(k.getHours())+':'+pad(k.getMinutes())+' KST';
           }
-          results.push({tag: src2, hl, link, time: timeStr, pubDate: pub ? new Date(pub).getTime() : 0});
+          results.push({tag:src2,hl,link,time:timeStr,pubDate:pub?new Date(pub).getTime():0});
         }
         return results;
-      })
-      .catch(()=>[]);
+      }).catch(()=>[]);
   });
-
-  const allResults = await Promise.all(promises);
-  items = allResults.flat().sort((a,b)=>b.pubDate-a.pubDate);
-
+  const allResults=await Promise.all(promises);
+  const items=allResults.flat().sort((a,b)=>b.pubDate-a.pubDate);
   if(!items.length){
-    el.innerHTML = '<div class="loading-text">헤드라인을 불러오지 못했습니다. 잠시 후 새로고침해주세요.</div>';
-    btn.disabled = false; return;
+    el.innerHTML='<div class="loading-text">헤드라인을 불러오지 못했습니다. 잠시 후 새로고침해주세요.</div>';
+    btn.disabled=false; return;
   }
-
-  el.innerHTML = items.slice(0,12).map(it=>`
+  el.innerHTML=items.slice(0,12).map(it=>`
     <div class="news-item" onclick="window.open('${it.link}','_blank')">
-      <div class="news-src">
-        <span class="src-tag">${it.tag.replace(/</g,'&lt;').slice(0,25)}</span>
-        <span>${it.time}</span>
-      </div>
+      <div class="news-src"><span class="src-tag">${it.tag.replace(/</g,'&lt;').slice(0,25)}</span><span>${it.time}</span></div>
       <div class="news-hl">${it.hl.replace(/</g,'&lt;').slice(0,140)}</div>
     </div>
   `).join('');
-  btn.disabled = false;
+  btn.disabled=false;
+};
+
+let allMemos=[];
+
+window.loadMemos = function(){
+  const el=document.getElementById('memo-list');
+  el.innerHTML='<div class="loading-text"><span class="spinner"></span>게시판 불러오는 중...</div>';
+  const memosRef=query(ref(db,'memos'),orderByChild('ts'));
+  onValue(memosRef, snap=>{
+    allMemos=[];
+    snap.forEach(child=>{
+      allMemos.push({id:child.key, ...child.val()});
+    });
+    allMemos.reverse();
+    renderMemos(allMemos);
+  }, err=>{
+    el.innerHTML='<div class="loading-text" style="color:#b91c1c;">Firebase 연결 오류. 잠시 후 다시 시도해주세요.</div>';
+  });
+};
+
+function renderMemos(memos){
+  const el=document.getElementById('memo-list');
+  if(!memos.length){
+    el.innerHTML='<div class="loading-text">아직 메모가 없습니다. 첫 메모를 남겨보세요!</div>';
+    return;
+  }
+  el.innerHTML=memos.map(m=>`
+    <div class="memo-item">
+      <div class="memo-meta">
+        <div class="memo-author"><div class="avatar">${initials(m.name)}</div>${(m.name||'').replace(/</g,'&lt;')}${m.priority==='높음'?'<span class="tag-높음">★ 중요</span>':''}</div>
+        <div class="memo-date">${relTime(m.ts)}</div>
+      </div>
+      <div class="memo-title">${(m.title||'').replace(/</g,'&lt;')}</div>
+      <div class="memo-body">${(m.body||'').replace(/</g,'&lt;')}</div>
+      <span class="tag tag-${m.tag}">${m.tag}</span>
+    </div>
+  `).join('');
 }
+
+window.filterMemos = function(){
+  const kw=document.getElementById('search-input').value.trim().toLowerCase();
+  const tag=document.getElementById('filter-tag').value;
+  const filtered=allMemos.filter(m=>{
+    const matchTag=!tag||m.tag===tag;
+    const matchKw=!kw||(m.title||'').toLowerCase().includes(kw)||(m.body||'').toLowerCase().includes(kw)||(m.name||'').toLowerCase().includes(kw);
+    return matchTag&&matchKw;
+  });
+  renderMemos(filtered);
+};
+
+window.postMemo = async function(){
+  const name=document.getElementById('f-name').value.trim();
+  const title=document.getElementById('f-title').value.trim();
+  const body=document.getElementById('f-body').value.trim();
+  const tag=document.getElementById('f-tag').value;
+  const priority=document.getElementById('f-priority').value;
+  const st=document.getElementById('form-status');
+  const btn=document.getElementById('btn-post');
+  if(!name){st.textContent='이름을 입력해주세요.';st.className='form-status status-err';return;}
+  if(!title){st.textContent='제목을 입력해주세요.';st.className='form-status status-err';return;}
+  if(!body){st.textContent='내용을 입력해주세요.';st.className='form-status status-err';return;}
+  btn.disabled=true;
+  st.innerHTML='<span class="spinner"></span>게시 중...';
+  st.className='form-status';
+  try{
+    await push(ref(db,'memos'),{name,title,body,tag,priority,ts:Date.now()});
+    document.getElementById('f-title').value='';
+    document.getElementById('f-body').value='';
+    st.textContent='게시되었습니다!';
+    st.className='form-status status-ok';
+    setTimeout(()=>{st.textContent='';},2000);
+  } catch(e){
+    st.textContent='오류가 발생했습니다: '+e.message;
+    st.className='form-status status-err';
+  }
+  btn.disabled=false;
+};
 
 loadMetrics();
 loadNews();
+loadMemos();
 </script>
 </body>
 </html>
