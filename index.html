@@ -7,18 +7,11 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --navy: #1a3d6b;
-    --navy-light: #e8eef5;
-    --border: #e2e5ea;
-    --bg: #f5f6f8;
-    --card: #ffffff;
-    --text: #1a1d23;
-    --text-2: #4a5568;
-    --text-3: #9aa3b0;
-    --up: #b91c1c;
-    --down: #15803d;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --navy: #1a3d6b; --navy-light: #e8eef5; --border: #e2e5ea;
+    --bg: #f5f6f8; --card: #ffffff; --text: #1a1d23;
+    --text-2: #4a5568; --text-3: #9aa3b0;
+    --up: #b91c1c; --down: #15803d;
+    --radius: 10px; --radius-sm: 6px;
   }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
   .wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
@@ -45,8 +38,9 @@
   .up { color: var(--up); } .down { color: var(--down); }
   .metric-note { font-size: 11px; color: var(--text-3); margin-top: 9px; }
   .news-list { display: flex; flex-direction: column; }
-  .news-item { padding: .65rem 0; border-bottom: 1px solid var(--border); }
+  .news-item { padding: .65rem 0; border-bottom: 1px solid var(--border); cursor: pointer; }
   .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .news-item:hover .news-hl { color: var(--navy); text-decoration: underline; }
   .news-src { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
   .src-tag { background: var(--navy-light); color: var(--navy); padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
   .news-hl { font-size: 13px; color: var(--text); line-height: 1.5; }
@@ -68,9 +62,7 @@
     </div>
     <span id="clock">--:-- KST</span>
   </header>
-
   <div class="grid">
-
     <div class="card">
       <div class="card-hd">
         <span class="card-title">주요 지표 <span class="live-dot"></span></span>
@@ -84,7 +76,6 @@
       </div>
       <div id="metrics-note" class="metric-note"></div>
     </div>
-
     <div class="card">
       <div class="card-hd">
         <span class="card-title">외신 헤드라인</span>
@@ -94,10 +85,8 @@
         <div class="loading-text"><span class="spinner"></span>불러오는 중...</div>
       </div>
     </div>
-
   </div>
 </div>
-
 <script>
 const PROXY = "https://api.allorigins.win/get?url=";
 
@@ -105,8 +94,7 @@ function pad(n){ return String(n).padStart(2,'0'); }
 function updateClock(){
   const now = new Date();
   const kst = new Date(now.getTime() + (9*60 - now.getTimezoneOffset())*60000);
-  document.getElementById('clock').textContent =
-    pad(kst.getUTCHours())+':'+pad(kst.getUTCMinutes())+':'+pad(kst.getUTCSeconds())+' KST';
+  document.getElementById('clock').textContent = pad(kst.getUTCHours())+':'+pad(kst.getUTCMinutes())+':'+pad(kst.getUTCSeconds())+' KST';
 }
 setInterval(updateClock, 1000); updateClock();
 
@@ -116,7 +104,7 @@ async function loadMetrics(){
   btn.disabled = true;
   note.innerHTML = '<span class="spinner"></span>불러오는 중...';
   const symbols = ['USDKRW=X','^GSPC','CL=F','^TNX'];
-  const ids     = ['m-usd','m-sp','m-oil','m-bond'];
+  const ids = ['m-usd','m-sp','m-oil','m-bond'];
   let ok = 0;
   for(let i=0;i<symbols.length;i++){
     try{
@@ -125,33 +113,23 @@ async function loadMetrics(){
       const outer = await res.json();
       const meta = JSON.parse(outer.contents).chart.result[0].meta;
       const price = meta.regularMarketPrice;
-      const prev  = meta.chartPreviousClose || meta.previousClose || price;
-      const diff  = price - prev;
-      const pct   = diff / prev * 100;
-      const isUp  = diff >= 0;
-      const id    = ids[i];
+      const prev = meta.chartPreviousClose || meta.previousClose || price;
+      const diff = price - prev;
+      const pct = diff / prev * 100;
+      const isUp = diff >= 0;
+      const id = ids[i];
       let val, ch;
-      if(id==='m-usd'){
-        val = price.toLocaleString('ko-KR',{maximumFractionDigits:2});
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
-      } else if(id==='m-sp'){
-        val = price.toLocaleString('ko-KR',{maximumFractionDigits:0});
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(1)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
-      } else if(id==='m-oil'){
-        val = '$'+price.toFixed(2);
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
-      } else {
-        val = price.toFixed(2)+'%';
-        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp';
-      }
+      if(id==='m-usd'){ val = price.toLocaleString('ko-KR',{maximumFractionDigits:2}); ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)'; }
+      else if(id==='m-sp'){ val = price.toLocaleString('ko-KR',{maximumFractionDigits:0}); ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(1)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)'; }
+      else if(id==='m-oil'){ val = '$'+price.toFixed(2); ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)'; }
+      else { val = price.toFixed(2)+'%'; ch = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp'; }
       document.getElementById(id).textContent = val;
       const cel = document.getElementById(id+'-ch');
       cel.textContent = ch; cel.className = 'metric-ch '+(isUp?'up':'down');
       ok++;
     } catch(e){
       document.getElementById(ids[i]).textContent = '—';
-      const cel = document.getElementById(ids[i]+'-ch');
-      cel.textContent = '연결 오류'; cel.className = 'metric-ch';
+      document.getElementById(ids[i]+'-ch').textContent = '연결 오류';
     }
   }
   const now = new Date();
@@ -160,48 +138,48 @@ async function loadMetrics(){
   btn.disabled = false;
 }
 
-const RSS = [
-  {tag:'Reuters',  url:'https://feeds.reuters.com/reuters/businessNews'},
-  {tag:'FT',       url:'https://www.ft.com/rss/home/uk'},
-  {tag:'Bloomberg',url:'https://feeds.bloomberg.com/markets/news.rss'},
-];
-const FALLBACK = [
-  {tag:'Reuters',  hl:'Fed minutes signal caution on rate path despite cooling inflation', time:''},
-  {tag:'WSJ',      hl:'US-China trade negotiators to resume talks in Geneva next week', time:''},
-  {tag:'FT',       hl:'ECB hawks push back against September rate cut expectations', time:''},
-  {tag:'Bloomberg',hl:'Iran nuclear talks stall as Tehran demands sanction relief timeline', time:''},
-  {tag:'Nikkei',   hl:'Semiconductor supply crunch deepens amid US export controls', time:''},
+const GN_QUERIES = [
+  { label: 'Fed',    q: 'Federal+Reserve+interest+rate' },
+  { label: 'Economy',q: 'US+economy+GDP+inflation' },
+  { label: 'Trade',  q: 'US+China+trade+tariff' },
+  { label: 'Markets',q: 'Wall+Street+stock+market' },
 ];
 
 async function loadNews(){
-  const el  = document.getElementById('news-list');
+  const el = document.getElementById('news-list');
   const btn = document.getElementById('btn-news');
   btn.disabled = true;
   el.innerHTML = '<div class="loading-text"><span class="spinner"></span>헤드라인 불러오는 중...</div>';
   let items = [];
-  for(const src of RSS){
+  for(const src of GN_QUERIES){
     try{
-      const res = await fetch(PROXY + encodeURIComponent(src.url));
+      const gnUrl = `https://news.google.com/rss/search?q=${src.q}&hl=en-US&gl=US&ceid=US:en`;
+      const res = await fetch(PROXY + encodeURIComponent(gnUrl));
       const outer = await res.json();
-      const xml = new DOMParser().parseFromString(outer.contents,'text/xml');
+      const xml = new DOMParser().parseFromString(outer.contents, 'text/xml');
       const entries = xml.querySelectorAll('item');
       for(let i=0;i<Math.min(2,entries.length);i++){
         const hl = entries[i].querySelector('title')?.textContent?.trim()||'';
+        const link = entries[i].querySelector('link')?.textContent?.trim()||'#';
         const pub = entries[i].querySelector('pubDate')?.textContent||'';
+        const src2 = entries[i].querySelector('source')?.textContent?.trim()||src.label;
         let timeStr = '';
         if(pub){
           const d = new Date(pub);
           const k = new Date(d.getTime()+(9*60-d.getTimezoneOffset())*60000);
           timeStr = pad(k.getUTCHours())+':'+pad(k.getUTCMinutes())+' KST';
         }
-        if(hl) items.push({tag:src.tag, hl, time:timeStr});
+        if(hl) items.push({tag:src2, hl, link, time:timeStr});
       }
     } catch(e){}
   }
-  if(!items.length) items = FALLBACK;
-  el.innerHTML = items.slice(0,6).map(it=>`
-    <div class="news-item">
-      <div class="news-src"><span class="src-tag">${it.tag}</span>${it.time}</div>
+  if(!items.length){
+    el.innerHTML = '<div class="loading-text">헤드라인을 불러오지 못했습니다. 잠시 후 새로고침해주세요.</div>';
+    btn.disabled = false; return;
+  }
+  el.innerHTML = items.slice(0,8).map(it=>`
+    <div class="news-item" onclick="window.open('${it.link}','_blank')">
+      <div class="news-src"><span class="src-tag">${it.tag.replace(/</g,'&lt;').slice(0,20)}</span>${it.time}</div>
       <div class="news-hl">${it.hl.replace(/</g,'&lt;').slice(0,130)}</div>
     </div>
   `).join('');
