@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이데일리 국제경제부 데스크</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1a3d6b;
+    --navy-light: #e8eef5;
+    --border: #e2e5ea;
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --text: #1a1d23;
+    --text-2: #4a5568;
+    --text-3: #9aa3b0;
+    --up: #b91c1c;
+    --down: #15803d;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+  header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.1rem; border-bottom: 1.5px solid var(--border); margin-bottom: 1.5rem; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-badge { background: var(--navy); color: #fff; font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: var(--radius-sm); }
+  .logo-text h1 { font-size: 16px; font-weight: 600; color: var(--text); }
+  .logo-text p { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+  #clock { font-size: 13px; color: var(--text-2); background: var(--card); border: 1px solid var(--border); padding: 5px 12px; border-radius: var(--radius-sm); font-variant-numeric: tabular-nums; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; }
+  .card-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+  .card-title { font-size: 12px; font-weight: 600; color: var(--text-2); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .3px; }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #e74c3c; display: inline-block; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+  .btn-sm { font-size: 11px; color: var(--text-3); background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 9px; cursor: pointer; transition: all .15s; }
+  .btn-sm:hover { color: var(--text-2); border-color: #bbb; }
+  .btn-sm:disabled { opacity: .5; cursor: default; }
+  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .metric { background: var(--bg); border-radius: var(--radius-sm); padding: .7rem 1rem; }
+  .metric-label { font-size: 11px; color: var(--text-3); margin-bottom: 3px; }
+  .metric-value { font-size: 20px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+  .metric-ch { font-size: 11px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .up { color: var(--up); } .down { color: var(--down); }
+  .metric-note { font-size: 11px; color: var(--text-3); margin-top: 9px; }
+  .news-list { display: flex; flex-direction: column; }
+  .news-item { padding: .65rem 0; border-bottom: 1px solid var(--border); }
+  .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .news-src { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .src-tag { background: var(--navy-light); color: var(--navy); padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .news-hl { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .loading-text { font-size: 12px; color: var(--text-3); padding: .4rem 0; }
+  .spinner { display: inline-block; width: 10px; height: 10px; border: 1.5px solid var(--border); border-top-color: var(--text-3); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 5px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <div class="logo-badge">이데일리</div>
+      <div class="logo-text">
+        <h1>국제경제부 데스크</h1>
+        <p>Global Economics</p>
+      </div>
+    </div>
+    <span id="clock">--:-- KST</span>
+  </header>
 
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">주요 지표 <span class="live-dot"></span></span>
+        <button class="btn-sm" id="btn-metrics" onclick="loadMetrics()">새로고침</button>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">원/달러</div><div class="metric-value" id="m-usd">—</div><div class="metric-ch" id="m-usd-ch"></div></div>
+        <div class="metric"><div class="metric-label">S&P 500</div><div class="metric-value" id="m-sp">—</div><div class="metric-ch" id="m-sp-ch"></div></div>
+        <div class="metric"><div class="metric-label">국제유가 (WTI)</div><div class="metric-value" id="m-oil">—</div><div class="metric-ch" id="m-oil-ch"></div></div>
+        <div class="metric"><div class="metric-label">미 10년물</div><div class="metric-value" id="m-bond">—</div><div class="metric-ch" id="m-bond-ch"></div></div>
+      </div>
+      <div id="metrics-note" class="metric-note"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">외신 헤드라인</span>
+        <button class="btn-sm" id="btn-news" onclick="loadNews()">새로고침</button>
+      </div>
+      <div class="news-list" id="news-list">
+        <div class="loading-text"><span class="spinner"></span>불러오는 중...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PROXY = "https://api.allorigins.win/get?url=";
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function updateClock(){
+  const now = new Date();
+  const kst = new Date(now.getTime() + (9*60 - now.getTimezoneOffset())*60000);
+  document.getElementById('clock').textContent =
+    pad(kst.getUTCHours())+':'+pad(kst.getUTCMinutes())+':'+pad(kst.getUTCSeconds())+' KST';
+}
+setInterval(updateClock, 1000); updateClock();
+
+async function loadMetrics(){
+  const btn = document.getElementById('btn-metrics');
+  const note = document.getElementById('metrics-note');
+  btn.disabled = true;
+  note.innerHTML = '<span class="spinner"></span>불러오는 중...';
+  const symbols = ['USDKRW=X','^GSPC','CL=F','^TNX'];
+  const ids     = ['m-usd','m-sp','m-oil','m-bond'];
+  let ok = 0;
+  for(let i=0;i<symbols.length;i++){
+    try{
+      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbols[i]}?interval=1d&range=2d`;
+      const res = await fetch(PROXY + encodeURIComponent(url));
+      const outer = await res.json();
+      const meta = JSON.parse(outer.contents).chart.result[0].meta;
+      const price = meta.regularMarketPrice;
+      const prev  = meta.chartPreviousClose || meta.previousClose || price;
+      const diff  = price - prev;
+      const pct   = diff / prev * 100;
+      const isUp  = diff >= 0;
+      const id    = ids[i];
+      let val, ch;
+      if(id==='m-usd'){
+        val = price.toLocaleString('ko-KR',{maximumFractionDigits:2});
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+      } else if(id==='m-sp'){
+        val = price.toLocaleString('ko-KR',{maximumFractionDigits:0});
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(1)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+      } else if(id==='m-oil'){
+        val = '$'+price.toFixed(2);
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(2)+' ('+(isUp?'+':'')+pct.toFixed(2)+'%)';
+      } else {
+        val = price.toFixed(2)+'%';
+        ch  = (isUp?'▲ ':'▼ ')+Math.abs(diff).toFixed(3)+'bp';
+      }
+      document.getElementById(id).textContent = val;
+      const cel = document.getElementById(id+'-ch');
+      cel.textContent = ch; cel.className = 'metric-ch '+(isUp?'up':'down');
+      ok++;
+    } catch(e){
+      document.getElementById(ids[i]).textContent = '—';
+      const cel = document.getElementById(ids[i]+'-ch');
+      cel.textContent = '연결 오류'; cel.className = 'metric-ch';
+    }
+  }
+  const now = new Date();
+  const kst = new Date(now.getTime()+(9*60-now.getTimezoneOffset())*60000);
+  note.textContent = pad(kst.getUTCHours())+':'+pad(kst.getUTCMinutes())+' KST 기준'+(ok<4?' (일부 오류)':'');
+  btn.disabled = false;
+}
+
+const RSS = [
+  {tag:'Reuters',  url:'https://feeds.reuters.com/reuters/businessNews'},
+  {tag:'FT',       url:'https://www.ft.com/rss/home/uk'},
+  {tag:'Bloomberg',url:'https://feeds.bloomberg.com/markets/news.rss'},
+];
+const FALLBACK = [
+  {tag:'Reuters',  hl:'Fed minutes signal caution on rate path despite cooling inflation', time:''},
+  {tag:'WSJ',      hl:'US-China trade negotiators to resume talks in Geneva next week', time:''},
+  {tag:'FT',       hl:'ECB hawks push back against September rate cut expectations', time:''},
+  {tag:'Bloomberg',hl:'Iran nuclear talks stall as Tehran demands sanction relief timeline', time:''},
+  {tag:'Nikkei',   hl:'Semiconductor supply crunch deepens amid US export controls', time:''},
+];
+
+async function loadNews(){
+  const el  = document.getElementById('news-list');
+  const btn = document.getElementById('btn-news');
+  btn.disabled = true;
+  el.innerHTML = '<div class="loading-text"><span class="spinner"></span>헤드라인 불러오는 중...</div>';
+  let items = [];
+  for(const src of RSS){
+    try{
+      const res = await fetch(PROXY + encodeURIComponent(src.url));
+      const outer = await res.json();
+      const xml = new DOMParser().parseFromString(outer.contents,'text/xml');
+      const entries = xml.querySelectorAll('item');
+      for(let i=0;i<Math.min(2,entries.length);i++){
+        const hl = entries[i].querySelector('title')?.textContent?.trim()||'';
+        const pub = entries[i].querySelector('pubDate')?.textContent||'';
+        let timeStr = '';
+        if(pub){
+          const d = new Date(pub);
+          const k = new Date(d.getTime()+(9*60-d.getTimezoneOffset())*60000);
+          timeStr = pad(k.getUTCHours())+':'+pad(k.getUTCMinutes())+' KST';
+        }
+        if(hl) items.push({tag:src.tag, hl, time:timeStr});
+      }
+    } catch(e){}
+  }
+  if(!items.length) items = FALLBACK;
+  el.innerHTML = items.slice(0,6).map(it=>`
+    <div class="news-item">
+      <div class="news-src"><span class="src-tag">${it.tag}</span>${it.time}</div>
+      <div class="news-hl">${it.hl.replace(/</g,'&lt;').slice(0,130)}</div>
+    </div>
+  `).join('');
+  btn.disabled = false;
+}
+
+loadMetrics();
+loadNews();
+</script>
+</body>
+</html>
